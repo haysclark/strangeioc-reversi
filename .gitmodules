@@ -1,0 +1,3 @@
+[submodule "Assets/scripts/strange"]
+	path = Assets/scripts/strange
+	url = https://github.com/strangeioc/strange-core.git

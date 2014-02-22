@@ -31,3 +31,12 @@ ExportedObj/
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# ================ #
+# Project Specific #
+# ================ #
+
+# ====================== #
+# ignore submodules meta #
+# ====================== #
+Assets/scripts/strange.meta
