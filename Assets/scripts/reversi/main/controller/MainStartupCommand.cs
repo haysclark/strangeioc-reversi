@@ -16,6 +16,9 @@ namespace reversi.main
 		[Inject(ContextKeys.CONTEXT_VIEW)]
 		public GameObject contextView { get; set; }
 
+		[Inject]
+		public IApplication application { get; set; }
+
 		override public void Execute ()
 		{
 			Debug.Log( "MainStartupCommand" );

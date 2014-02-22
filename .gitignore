@@ -32,6 +32,12 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+# ==================== #
+# Unity Test Generated #
+# ==================== #
+test-results
+test-results.meta
+
 # ================ #
 # Project Specific #
 # ================ #
