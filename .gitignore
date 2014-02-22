@@ -40,3 +40,4 @@ Thumbs.db
 # ignore submodules meta #
 # ====================== #
 Assets/scripts/strange.meta
+Assets/scripts/UnityTestTools.meta
