@@ -82,6 +82,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 441746798}
+  - 114: {fileID: 441746799}
   m_Layer: 0
   m_Name: DialogContextView
   m_TagString: Untagged
@@ -100,3 +101,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!114 &441746799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 441746797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bf2640fcd0aa4a14a24cfd4cd9aea83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

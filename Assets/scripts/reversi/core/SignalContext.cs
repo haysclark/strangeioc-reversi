@@ -10,11 +10,11 @@ using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.signal.impl;
 
-public class StartSignal : Signal{}
-
 public class SignalContext : MVCSContext
 {
-	public SignalContext (MonoBehaviour contextView) : base(contextView)
+	Signal _startSignal;
+
+	public SignalContext ( MonoBehaviour contextView ) : base(contextView)
 	{
 	}
 
@@ -28,12 +28,23 @@ public class SignalContext : MVCSContext
 	public override void Launch ()
 	{
 		base.Launch ();
-		StartSignal startSignal = (StartSignal)injectionBinder.GetInstance<StartSignal>(); 
-		startSignal.Dispatch();
+		if( _startSignal != null )
+		{
+			_startSignal.Dispatch();
+		}
 	}
 
 	protected override void mapBindings ()
 	{
 		base.mapBindings ();
 	}
+
+	protected void bindStartCommand<T,U>()
+		where T : Signal, new()
+		where U : ICommand, new()
+	{
+		commandBinder.Bind<T> ().To<U> ();
+		_startSignal = (Signal)injectionBinder.GetInstance<T>(); 
+	}
+
 }

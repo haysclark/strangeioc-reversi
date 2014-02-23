@@ -3,13 +3,17 @@
 using System;
 using UnityEngine;
 using strange.extensions.context.impl;
+using strange.extensions.signal.impl;
 
 namespace reversi.main
 {
+	public class MainContextStartSignal : Signal{}
+
 	public class MainContext : SignalContext
 	{
-		public MainContext (MonoBehaviour contextView) : base (contextView)
+		public MainContext (MonoBehaviour contextView) : base ( contextView )
 		{
+
 		}
 
 		protected override void mapBindings ()
@@ -17,16 +21,10 @@ namespace reversi.main
 			base.mapBindings ();
 			if( isFirstContext() )
 			{
-				mapFirstBindings();
+				new ConfigureApplicationService().map( this );
 			}
 
-			commandBinder.Bind<StartSignal> ()
-				.To<MainStartupCommand> ();
-		}
-
-		protected void mapFirstBindings ()
-		{
-			new ConfigureApplicationService().map( this );
+			bindStartCommand<MainContextStartSignal, MainStartupCommand>();
 		}
 
 		private bool isFirstContext()
