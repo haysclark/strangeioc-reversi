@@ -32,14 +32,12 @@ namespace reversi.main
 			Assert.True( _instance is Command );
 		}
 
-		/**
 		[Test]
 		public void testExecuteShouldLoadGameLevel ()
 		{
 			_instance.Execute();
 
-			_instance.application.Received().LoadLevelAdditive ("game");
+			_instance.application.Received().LoadLevelAdditive ("dialog");
 		}
-		**/
 	}
 }

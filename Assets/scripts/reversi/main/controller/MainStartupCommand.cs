@@ -21,7 +21,7 @@ namespace reversi.main
 
 		override public void Execute ()
 		{
-			Debug.Log( "MainStartupCommand" );
+			application.LoadLevelAdditive ("dialog");
 		}
 	}
 }
