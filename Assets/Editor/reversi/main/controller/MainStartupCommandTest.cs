@@ -12,12 +12,15 @@ namespace reversi.main
 	public class MainStartupCommandTest
 	{
 		MainStartupCommand _instance;
+		IApplication _mockApplication;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_instance = new MainStartupCommand();
-			_instance.application = Substitute.For<IApplication>();
+
+			_mockApplication = Substitute.For<IApplication>();
+			_instance.application = _mockApplication;
 		}
 		
 		[TearDown]
@@ -37,7 +40,7 @@ namespace reversi.main
 		{
 			_instance.Execute();
 
-			_instance.application.Received().LoadLevelAdditive ("dialog");
+			_mockApplication.Received().LoadLevelAdditive ("dialog");
 		}
 	}
 }
