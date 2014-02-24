@@ -9,16 +9,30 @@
 
 using UnityEngine;
 using System.Collections;
+using strange.extensions.context.api;
 using strange.extensions.context.impl;
+using strange.extensions.signal.impl;
 
 namespace reversi.main
 {
+	public class MainContextStartSignal : Signal{}
+
 	public class MainBootstrap : ContextView
 	{
-		// Initialize the Context
+		// Build a Context
 		void Start ()
 		{
-			context = new MainContext (this);
+			context = new ContextBuilder()
+				.forContextView( this )
+				.setStartSignalAndCommand<MainContextStartSignal, MainStartupCommand>()
+				.addContextMapper( ContextMapperFactory.createFirstRun( new ConfigureApplicationService().map ) )
+				.addContextMapper( contextMappings )
+				.build();
+		}
+
+		private void contextMappings( ICrossContextCapable context )
+		{
+			Debug.Log( "contextMappings" );
 		}
 	}
 }

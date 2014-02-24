@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-using UnityEngine;
-using System.Collections;
 using strange.extensions.context.impl;
 
 namespace reversi.dialog
@@ -11,7 +8,10 @@ namespace reversi.dialog
 	{
 		void Start ()
 		{
-			context = new DialogContext (this);
+			context = new ContextBuilder()
+				.forContextView( this )
+				.useSignals()
+				.build();
 		}
 	}
 }
