@@ -16,21 +16,26 @@ public class ContextBuilder
 	public List<Action<ICrossContextCapable>> mapBindings = new List<Action<ICrossContextCapable>>();
 	public List<Action<ICrossContextCapable>> launchBindings = new List<Action<ICrossContextCapable>>();
 
-	public ContextBuilder forContextView( MonoBehaviour contextView )
+	public ContextBuilder ForContextView( MonoBehaviour contextView )
 	{
 		_contextView = contextView;
 		return this;
 	}
 
-	public ContextBuilder addContextMapper( Action<ICrossContextCapable> contextAction )
+	public MapBinderBuilder MapBinder()
+	{
+		return new MapBinderBuilder( this, mapBindings );
+	}
+
+	public ContextBuilder AddMapBinder( Action<ICrossContextCapable> contextAction )
 	{
 		mapBindings.Add( contextAction );
 		return this;
 	}
 
-	public ContextBuilder useSignals()
+	public ContextBuilder UseSignals()
 	{
-		Action<ICrossContextCapable> action = SignalsMapper.setup;
+		Action<ICrossContextCapable> action = SignalsConfigurator.Setup;
 		if(!preBindings.Contains( action ))
 		{
 			preBindings.Add( action );
@@ -38,42 +43,67 @@ public class ContextBuilder
 		return this;
 	}
 
-	public ContextBuilder setStartSignalAndCommand<T,U>()
+	public ContextBuilder SetStartSignalAndCommand<T,U>()
 		where T : Signal, new()
 		where U : ICommand, new()
 	{
-		useSignals();
-		Action<ICrossContextCapable> action = new StartSignalMapper().setSignalAndCommand<T,U>();
+		UseSignals();
+		Action<ICrossContextCapable> action = new StartSignalMapper().SetSignalAndCommand<T,U>();
 		launchBindings.Add( action );
 		return this;
 	}
 
-	public MVCSContext build()
+	public MVCSContext Build()
 	{
 		GeneratedContext context = new GeneratedContext( _contextView, ContextStartupFlags.MANUAL_MAPPING );
 		_contextView = null;
 
-		context.onPreMapBindings = new MapToContextList(preBindings).Map;
-		context.onMapBindings = new MapToContextList(mapBindings).Map;
-		context.onLaunch = new MapToContextList(launchBindings).Map;
+		context.onPreMapBindings = new MapperActionListExecuter(preBindings).Execute;
+		context.onMapBindings = new MapperActionListExecuter(mapBindings).Execute;
+		context.onLaunch = new MapperActionListExecuter(launchBindings).Execute;
 
 		context.Start();
 		return context;
 	}
 }
 
-public class SignalsMapper
+public class SignalsConfigurator
 {
-	public static void setup( ICrossContextCapable context )
+	public static void Setup( ICrossContextCapable context )
 	{
 		context.injectionBinder.Unbind<ICommandBinder> ();
 		context.injectionBinder.Bind<ICommandBinder> ().To<SignalCommandBinder> ().ToSingleton ();
 	}
 }
 
+public class MapBinderBuilder
+{
+	private ContextBuilder _parent;
+	private List<Action<ICrossContextCapable>> _preBindings;
+
+	public MapBinderBuilder( ContextBuilder parent, List<Action<ICrossContextCapable>> preBindings )
+	{
+		_preBindings = preBindings;
+		_parent = parent;
+	}
+
+	public ContextBuilder Add( Action<ICrossContextCapable> contextAction )
+	{
+		_preBindings.Add( contextAction );
+		return _parent;
+	}
+
+	
+	public ContextBuilder AddFirstRunOnly( Action<ICrossContextCapable> contextAction )
+	{
+		_preBindings.Add(FirstRunOnly.Do( contextAction ));
+		return _parent;
+	}
+}
+
 public class StartSignalMapper
 {
-	public Action<ICrossContextCapable> setSignalAndCommand<T,U>()
+	public Action<ICrossContextCapable> SetSignalAndCommand<T,U>()
 		where T : Signal, new()
 		where U : ICommand, new()
 	{
@@ -88,15 +118,15 @@ public class StartSignalMapper
 	}
 }
 
-public class MapToContextList
+public class MapperActionListExecuter
 {
 	private List<Action<ICrossContextCapable>> _mapContextList;
-	public MapToContextList( List<Action<ICrossContextCapable>> mapContextList )
+	public MapperActionListExecuter( List<Action<ICrossContextCapable>> mapContextList )
 	{
 		_mapContextList = mapContextList;
 	}
 
-	public void Map( ICrossContextCapable context )
+	public void Execute( ICrossContextCapable context )
 	{
 		foreach ( Action<ICrossContextCapable> action in _mapContextList )
 		{
@@ -105,3 +135,20 @@ public class MapToContextList
 		_mapContextList.Clear();
 	}
 }
+
+public class FirstRunOnly
+{
+	public static Action<ICrossContextCapable> Do( Action<ICrossContextCapable> action )
+	{
+		Action<ICrossContextCapable> wrapper = delegate( ICrossContextCapable context )
+		{
+			if( Context.firstContext == context )
+			{
+				action( context );
+			}
+		};
+		return wrapper;
+	}
+}
+
+

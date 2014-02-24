@@ -42,7 +42,7 @@ namespace reversi.main
 			var mockFinalBinding = Substitute.For<IInjectionBinding>();
 			mockBinding.To<ApplicationWrapper>().Returns(mockFinalBinding);
 
-			_instance.map( mockContext );
+			_instance.Setup( mockContext );
 
 			mockBinder.Received().Bind<IApplication>();
 			mockBinding.Received().To<ApplicationWrapper>();

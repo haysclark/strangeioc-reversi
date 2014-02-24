@@ -6,7 +6,7 @@ namespace reversi.main
 {
 	public class ConfigureApplicationService 
 	{
-		public void map( ICrossContextCapable context )
+		public void Setup( ICrossContextCapable context )
 		{
 			context.injectionBinder.Bind<IApplication> ().To<ApplicationWrapper>().ToSingleton ();
 		}

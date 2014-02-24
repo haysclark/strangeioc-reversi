@@ -9,9 +9,9 @@ namespace reversi.dialog
 		void Start ()
 		{
 			context = new ContextBuilder()
-				.forContextView( this )
-				.useSignals()
-				.build();
+				.ForContextView( this )
+				.UseSignals()
+				.Build();
 		}
 	}
 }
