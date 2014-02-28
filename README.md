@@ -21,3 +21,5 @@ A Reversi game example coded for Unity3d utilizing the StrangeIoC framework.
   * Navigate to [project root]/Assets/scenes/main.unity
 
 * Press the 'Play' button to run example!
+
+* If you get compile errors, make sure your MonoDevelop projects are set to use the .Net 4.0 Framework.
