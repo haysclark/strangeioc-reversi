@@ -21,7 +21,7 @@ namespace reversi.main
 
 		override public void Execute ()
 		{
-			application.LoadLevelAdditive ("dialog");
+			application.LoadLevelAdditive ("game");
 		}
 	}
 }
