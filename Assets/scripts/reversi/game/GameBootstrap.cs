@@ -18,9 +18,10 @@ namespace reversi.game
 				.Build();
 		}
 
-		private void mapBinders (strange.extensions.context.api.ICrossContextCapable obj)
+		private void mapBinders (strange.extensions.context.api.ICrossContextCapable context)
 		{
-
+			context.injectionBinder.Bind<IResources>().To<reversi.main.ResourcesWrapper>().ToSingleton();
+			context.injectionBinder.Bind<IGameObject>().To<reversi.main.GameObjectWrapper>().ToSingleton();
 		}
 	}
 }
