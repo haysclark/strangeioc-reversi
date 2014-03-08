@@ -1,3 +1,9 @@
+// ------------------------------------------------------------------------------
+//  ContextBuilder
+//      This FLUENT Builder create a StrangeIOC GeneratedContext and was 
+//		inspired by Robotlegs 2.0's FLUENT contexts
+//      
+// ------------------------------------------------------------------------------
 using UnityEngine;
 using System;
 using System.Collections;
@@ -12,9 +18,9 @@ public class ContextBuilder
 {
 	MonoBehaviour _contextView;
 
-	public List<Action<ICrossContextCapable>> preBindings = new List<Action<ICrossContextCapable>>();
-	public List<Action<ICrossContextCapable>> mapBindings = new List<Action<ICrossContextCapable>>();
-	public List<Action<ICrossContextCapable>> launchBindings = new List<Action<ICrossContextCapable>>();
+	public List<Action<MVCSContext>> preBindings = new List<Action<MVCSContext>>();
+	public List<Action<MVCSContext>> mapBindings = new List<Action<MVCSContext>>();
+	public List<Action<MVCSContext>> launchBindings = new List<Action<MVCSContext>>();
 
 	public ContextBuilder ForContextView( MonoBehaviour contextView )
 	{
@@ -27,7 +33,7 @@ public class ContextBuilder
 		return new MapBinderBuilder( this, mapBindings );
 	}
 
-	public ContextBuilder AddMapBinder( Action<ICrossContextCapable> contextAction )
+	public ContextBuilder AddMapBinder( Action<MVCSContext> contextAction )
 	{
 		mapBindings.Add( contextAction );
 		return this;
@@ -35,7 +41,7 @@ public class ContextBuilder
 
 	public ContextBuilder UseSignals()
 	{
-		Action<ICrossContextCapable> action = SignalsConfigurator.Setup;
+		Action<MVCSContext> action = SignalsConfigurator.Setup;
 		if(!preBindings.Contains( action ))
 		{
 			preBindings.Add( action );
@@ -48,7 +54,7 @@ public class ContextBuilder
 		where U : ICommand, new()
 	{
 		UseSignals();
-		Action<ICrossContextCapable> action = new StartSignalMapper().SetSignalAndCommand<T,U>();
+		Action<MVCSContext> action = new StartSignalMapper().SetSignalAndCommand<T,U>();
 		launchBindings.Add( action );
 		return this;
 	}
@@ -69,7 +75,7 @@ public class ContextBuilder
 
 public class SignalsConfigurator
 {
-	public static void Setup( ICrossContextCapable context )
+	public static void Setup( MVCSContext context )
 	{
 		context.injectionBinder.Unbind<ICommandBinder> ();
 		context.injectionBinder.Bind<ICommandBinder> ().To<SignalCommandBinder> ().ToSingleton ();
@@ -79,22 +85,21 @@ public class SignalsConfigurator
 public class MapBinderBuilder
 {
 	private ContextBuilder _parent;
-	private List<Action<ICrossContextCapable>> _preBindings;
+	private List<Action<MVCSContext>> _preBindings;
 
-	public MapBinderBuilder( ContextBuilder parent, List<Action<ICrossContextCapable>> preBindings )
+	public MapBinderBuilder( ContextBuilder parent, List<Action<MVCSContext>> preBindings )
 	{
 		_preBindings = preBindings;
 		_parent = parent;
 	}
 
-	public ContextBuilder Add( Action<ICrossContextCapable> contextAction )
+	public ContextBuilder Add( Action<MVCSContext> contextAction )
 	{
 		_preBindings.Add( contextAction );
 		return _parent;
 	}
 
-	
-	public ContextBuilder AddFirstRunOnly( Action<ICrossContextCapable> contextAction )
+	public ContextBuilder AddFirstRunOnly( Action<MVCSContext> contextAction )
 	{
 		_preBindings.Add(FirstRunOnly.Do( contextAction ));
 		return _parent;
@@ -103,11 +108,11 @@ public class MapBinderBuilder
 
 public class StartSignalMapper
 {
-	public Action<ICrossContextCapable> SetSignalAndCommand<T,U>()
+	public Action<MVCSContext> SetSignalAndCommand<T,U>()
 		where T : Signal, new()
 		where U : ICommand, new()
 	{
-		Action<ICrossContextCapable> response = delegate(ICrossContextCapable context)
+		Action<MVCSContext> response = delegate(MVCSContext context)
 		{
 			var commandBinder = (SignalCommandBinder)context.injectionBinder.GetInstance<ICommandBinder>();
 			commandBinder.Bind<T> ().To<U> ();
@@ -120,35 +125,18 @@ public class StartSignalMapper
 
 public class MapperActionListExecuter
 {
-	private List<Action<ICrossContextCapable>> _mapContextList;
-	public MapperActionListExecuter( List<Action<ICrossContextCapable>> mapContextList )
+	private List<Action<MVCSContext>> _mapContextList;
+	public MapperActionListExecuter( List<Action<MVCSContext>> mapContextList )
 	{
 		_mapContextList = mapContextList;
 	}
 
-	public void Execute( ICrossContextCapable context )
+	public void Execute( MVCSContext context )
 	{
-		foreach ( Action<ICrossContextCapable> action in _mapContextList )
+		foreach ( Action<MVCSContext> action in _mapContextList )
 		{
 			action( context );
 		}
 		_mapContextList.Clear();
 	}
 }
-
-public class FirstRunOnly
-{
-	public static Action<ICrossContextCapable> Do( Action<ICrossContextCapable> action )
-	{
-		Action<ICrossContextCapable> wrapper = delegate( ICrossContextCapable context )
-		{
-			if( Context.firstContext == context )
-			{
-				action( context );
-			}
-		};
-		return wrapper;
-	}
-}
-
-

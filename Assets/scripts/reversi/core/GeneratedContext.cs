@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------------------
 //  GeneratedContext
-//      This Context is created by the ContextBuilder and is inspired by
+//      This Context is created by the ContextBuilder and was inspired by
 //		Robotlegs 2.0's FLUENT contexts
 //      
 // ------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ using strange.extensions.signal.impl;
 
 public class GeneratedContext : MVCSContext
 {
-	public Action<ICrossContextCapable> onPreMapBindings { get; set; }
-	public Action<ICrossContextCapable> onMapBindings { get; set; }
-	public Action<ICrossContextCapable> onLaunch { get; set; }
+	public Action<MVCSContext> onPreMapBindings { get; set; }
+	public Action<MVCSContext> onMapBindings { get; set; }
+	public Action<MVCSContext> onLaunch { get; set; }
 
 	public GeneratedContext (MonoBehaviour contextView) : base(contextView )
 	{
