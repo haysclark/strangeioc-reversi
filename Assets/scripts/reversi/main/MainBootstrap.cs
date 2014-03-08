@@ -37,7 +37,7 @@ namespace reversi.main
 
 		private void localMapBinder( ICrossContextCapable context )
 		{
-			Debug.Log( "localMapBinder" );
+
 		}
 	}
 }
