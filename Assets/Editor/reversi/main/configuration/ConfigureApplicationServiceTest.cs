@@ -32,26 +32,24 @@ namespace reversi.main
 			_instance = null;
 		}
 
-		//[Test]
-		//public void testMapBindsIApplicationToApplicationWrapperAsASingleton ()
-		//{
-			//var mockBinder = Substitute.For<ICrossContextInjectionBinder>();
-			//var mockContext = Substitute.For<MVCSContext>();
+		[Test]
+		public void testMapBindsIApplicationToApplicationWrapperAsASingleton ()
+		{
+			var mockBinder = Substitute.For<ICrossContextInjectionBinder>();
+			var fakeContext = new MVCSContext();
+			fakeContext.injectionBinder = mockBinder;
 
-			//Boo... looks like the Mocking framework is confused.
+			var mockBinding = Substitute.For<IInjectionBinding>();
+			mockBinder.Bind<IApplication>().Returns( mockBinding );
+			var mockFinalBinding = Substitute.For<IInjectionBinding>();
+			mockBinding.To<ApplicationWrapper>().Returns(mockFinalBinding);
 
-			//mockContext.injectionBinder.Returns( mockBinder );
-			//var mockBinding = Substitute.For<IInjectionBinding>();
-			//mockBinder.Bind<IApplication>().Returns( mockBinding );
-			//var mockFinalBinding = Substitute.For<IInjectionBinding>();
-			//mockBinding.To<ApplicationWrapper>().Returns(mockFinalBinding);
+			_instance.Setup( fakeContext );
 
-			//_instance.Setup( mockContext );
-
-			//mockBinder.Received().Bind<IApplication>();
-			//mockBinding.Received().To<ApplicationWrapper>();
-			//mockFinalBinding.Received().ToSingleton();
-		//}
+			mockBinder.Received().Bind<IApplication>();
+			mockBinding.Received().To<ApplicationWrapper>();
+			mockFinalBinding.Received().ToSingleton();
+		}
 	}
 }
 

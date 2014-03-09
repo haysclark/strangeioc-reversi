@@ -40,7 +40,7 @@ namespace reversi.main
 		{
 			_instance.Execute();
 
-			_mockApplication.Received().LoadLevelAdditive ("dialog");
+			_mockApplication.Received().LoadLevelAdditive ("game");
 		}
 	}
 }
