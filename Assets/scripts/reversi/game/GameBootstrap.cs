@@ -14,14 +14,14 @@ namespace reversi.game
 			context = new ContextBuilder()
 				.ForContextView(this)
 				.SetStartSignalAndCommand<GameContextStartSignal, GameStartupCommand>()
+				.MapBinder().Add( new reversi.main.ConfigureApplicationService().Setup )
 				.MapBinder().Add(mapBinders)
 				.Build();
 		}
 
 		private void mapBinders (strange.extensions.context.api.ICrossContextCapable context)
 		{
-			context.injectionBinder.Bind<IResources>().To<reversi.main.ResourcesWrapper>().ToSingleton();
-			context.injectionBinder.Bind<IGameObject>().To<reversi.main.GameObjectWrapper>().ToSingleton();
+
 		}
 	}
 }
