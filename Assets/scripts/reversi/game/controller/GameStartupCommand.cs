@@ -6,7 +6,7 @@ using strange.extensions.command.impl;
 
 namespace reversi.game
 {
-	class GameStartupCommand : Command
+	public class GameStartupCommand : Command
 	{
 		[Inject]
 		public IResources resources { get; set; }
