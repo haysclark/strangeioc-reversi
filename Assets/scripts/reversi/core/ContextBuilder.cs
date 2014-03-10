@@ -33,12 +33,6 @@ public class ContextBuilder
 		return new MapBinderBuilder( this, mapBindings );
 	}
 
-	public ContextBuilder AddMapBinder( Action<MVCSContext> contextAction )
-	{
-		mapBindings.Add( contextAction );
-		return this;
-	}
-
 	public ContextBuilder UseSignals()
 	{
 		Action<MVCSContext> action = SignalsConfigurator.Setup;

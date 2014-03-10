@@ -25,19 +25,8 @@ namespace reversi.main
 			context = new ContextBuilder()
 				.ForContextView( this )
 				.SetStartSignalAndCommand<MainContextStartSignal, MainStartupCommand>()
-				// Original version...
-				//.AddMapBinder( FirstRunOnly.Do( new ConfigureApplicationService().Setup ) )
-				//.AddMapBinder( localMapBinder )
-				//
-				// I think I like this better...
-				.MapBinder().Add( localMapBinder )
 				.MapBinder().AddFirstRunOnly( new ConfigureApplicationService().Setup )
 				.Build();
-		}
-
-		private void localMapBinder( ICrossContextCapable context )
-		{
-
 		}
 	}
 }
