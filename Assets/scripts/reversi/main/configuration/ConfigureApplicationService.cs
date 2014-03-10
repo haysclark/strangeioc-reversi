@@ -8,9 +8,9 @@ namespace reversi.main
 	{
 		public void Setup( MVCSContext context )
 		{
-			context.injectionBinder.Bind<IApplication> ().To<ApplicationWrapper>().ToSingleton ();
-			context.injectionBinder.Bind<IResources> ().To<ResourcesWrapper>().ToSingleton ();
-			context.injectionBinder.Bind<IGameObject> ().To<GameObjectWrapper>().ToSingleton ();
+			context.injectionBinder.Bind<IApplication> ().To<ApplicationWrapper>().ToSingleton ().CrossContext();
+			context.injectionBinder.Bind<IResources> ().To<ResourcesWrapper>().ToSingleton ().CrossContext();
+			context.injectionBinder.Bind<IGameObject> ().To<GameObjectWrapper>().ToSingleton ().CrossContext();
 		}
 	}
 }

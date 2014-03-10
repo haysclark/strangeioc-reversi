@@ -14,7 +14,6 @@ namespace reversi.game
 			context = new ContextBuilder()
 				.ForContextView(this)
 				.SetStartSignalAndCommand<GameContextStartSignal, GameStartupCommand>()
-				.MapBinder().Add( new reversi.main.ConfigureApplicationService().Setup )
 				.MapBinder().Add(mapBinders)
 				.Build();
 		}
