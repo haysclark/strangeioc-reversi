@@ -14,8 +14,12 @@ namespace reversi.game
 		[Inject]
 		public IGameObject gameObject { get; set; }
 
+		[Inject]
+		public SpaceModel spaceModel { get; set; }
+
 		override public void Execute()
 		{
+			spaceModel.Log();
 			addSceneLighting();
 			demoPopulatedScene();
 		}

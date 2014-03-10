@@ -2,6 +2,8 @@
 using System.Collections;
 using strange.extensions.context.impl;
 using strange.extensions.signal.impl;
+using strange.extensions.context.api;
+using reversi.main;
 
 namespace reversi.game
 {
@@ -14,13 +16,17 @@ namespace reversi.game
 			context = new ContextBuilder()
 				.ForContextView(this)
 				.SetStartSignalAndCommand<GameContextStartSignal, GameStartupCommand>()
-				.MapBinder().Add(mapBinders)
+				.MapBinder().Add( mapAllWithImplicitBinder )
 				.Build();
 		}
 
-		private void mapBinders (strange.extensions.context.api.ICrossContextCapable context)
+		private void mapAllWithImplicitBinder ( MVCSContext context )
 		{
-
+			string[] namespacesToBind = new string[]
+			{
+				"reversi.game"
+			};
+			context.implicitBinder.ScanForAnnotatedClasses(namespacesToBind);
 		}
 	}
 }
