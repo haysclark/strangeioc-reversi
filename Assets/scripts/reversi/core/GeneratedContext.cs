@@ -6,15 +6,13 @@
 // ------------------------------------------------------------------------------
 using System;
 using UnityEngine;
-using strange.extensions.context.api;
-using strange.extensions.context.impl;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
-using strange.extensions.signal.impl;
+using strange.extensions.context.api;
+using strange.extensions.context.impl;
 
 public class GeneratedContext : MVCSContext
 {
-	public Action<MVCSContext> onPreMapBindings { get; set; }
 	public Action<MVCSContext> onMapBindings { get; set; }
 	public Action<MVCSContext> onLaunch { get; set; }
 
@@ -22,7 +20,7 @@ public class GeneratedContext : MVCSContext
 	{
 	}
 
-	public GeneratedContext (MonoBehaviour view, ContextStartupFlags flags) : base(view, flags)
+	public GeneratedContext (MonoBehaviour view, ContextStartupFlags flags ) : base( view, flags )
 	{
 	}
 
@@ -35,23 +33,35 @@ public class GeneratedContext : MVCSContext
 		}
 	}
 
-	protected override void addCoreComponents ()
-	{
-		base.addCoreComponents ();
-	}
-
 	protected override void mapBindings ()
 	{
-		//Put here because addCoreComponents() is called during contruction
-		if( onPreMapBindings != null )
-		{
-			onPreMapBindings( this );
-		}
-
 		base.mapBindings ();
 		if( onMapBindings != null )
 		{
 			onMapBindings( this );
 		}
+	}
+}
+
+// ------------------------------------------------------------------------------
+//  GeneratedSignalsContext
+//      This Context is created by the ContextBuilder and was inspired by
+//		Robotlegs 2.0's FLUENT contexts.  Having to use Strategy Pattern
+//		because addCoreComponents() needs to be modified to support signals
+//		and it is called by the base class constructor which makes it hard
+//		to compose.
+//      
+// ------------------------------------------------------------------------------
+public class GeneratedSignalsContext : GeneratedContext
+{
+	public GeneratedSignalsContext (MonoBehaviour view, ContextStartupFlags flags ) : base( view, flags )
+	{
+	}
+
+	protected override void addCoreComponents ()
+	{
+		base.addCoreComponents ();
+		injectionBinder.Unbind<ICommandBinder>();
+		injectionBinder.Bind<ICommandBinder>().To<SignalCommandBinder>().ToSingleton();
 	}
 }

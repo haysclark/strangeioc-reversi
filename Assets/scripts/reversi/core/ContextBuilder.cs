@@ -6,7 +6,6 @@
 // ------------------------------------------------------------------------------
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using strange.extensions.context.api;
 using strange.extensions.context.impl;
@@ -17,10 +16,9 @@ using strange.extensions.signal.impl;
 public class ContextBuilder
 {
 	MonoBehaviour _contextView;
-
-	public List<Action<MVCSContext>> preBindings = new List<Action<MVCSContext>>();
-	public List<Action<MVCSContext>> mapBindings = new List<Action<MVCSContext>>();
-	public List<Action<MVCSContext>> launchBindings = new List<Action<MVCSContext>>();
+	Boolean _useSignals;
+	List<Action<MVCSContext>> _mapBindings = new List<Action<MVCSContext>>();
+	List<Action<MVCSContext>> _launchBindings = new List<Action<MVCSContext>>();
 
 	public ContextBuilder ForContextView( MonoBehaviour contextView )
 	{
@@ -30,16 +28,12 @@ public class ContextBuilder
 
 	public MapBinderBuilder MapBinder()
 	{
-		return new MapBinderBuilder( this, mapBindings );
+		return new MapBinderBuilder( this, _mapBindings );
 	}
 
 	public ContextBuilder UseSignals()
 	{
-		Action<MVCSContext> action = SignalsConfigurator.Setup;
-		if(!preBindings.Contains( action ))
-		{
-			preBindings.Add( action );
-		}
+		_useSignals = true;
 		return this;
 	}
 
@@ -49,18 +43,24 @@ public class ContextBuilder
 	{
 		UseSignals();
 		Action<MVCSContext> action = new StartSignalMapper().SetSignalAndCommand<T,U>();
-		launchBindings.Add( action );
+		_launchBindings.Add( action );
 		return this;
 	}
 
 	public MVCSContext Build()
 	{
-		GeneratedContext context = new GeneratedContext( _contextView, ContextStartupFlags.MANUAL_MAPPING );
+		GeneratedContext context;
+		if( _useSignals )
+		{
+			context = new GeneratedSignalsContext( _contextView, ContextStartupFlags.MANUAL_MAPPING );
+		}else
+		{
+			context = new GeneratedContext( _contextView, ContextStartupFlags.MANUAL_MAPPING );
+		}
 		_contextView = null;
 
-		context.onPreMapBindings = new MapperActionListExecuter(preBindings).Execute;
-		context.onMapBindings = new MapperActionListExecuter(mapBindings).Execute;
-		context.onLaunch = new MapperActionListExecuter(launchBindings).Execute;
+		context.onMapBindings = new MapperActionListExecuter(_mapBindings).Execute;
+		context.onLaunch = new MapperActionListExecuter(_launchBindings).Execute;
 
 		context.Start();
 		return context;
@@ -79,23 +79,23 @@ public class SignalsConfigurator
 public class MapBinderBuilder
 {
 	private ContextBuilder _parent;
-	private List<Action<MVCSContext>> _preBindings;
+	private List<Action<MVCSContext>> _mapBindings;
 
-	public MapBinderBuilder( ContextBuilder parent, List<Action<MVCSContext>> preBindings )
+	public MapBinderBuilder( ContextBuilder parent, List<Action<MVCSContext>> mapBindings )
 	{
-		_preBindings = preBindings;
+		_mapBindings = mapBindings;
 		_parent = parent;
 	}
 
 	public ContextBuilder Add( Action<MVCSContext> contextAction )
 	{
-		_preBindings.Add( contextAction );
+		_mapBindings.Add( contextAction );
 		return _parent;
 	}
 
 	public ContextBuilder AddFirstRunOnly( Action<MVCSContext> contextAction )
 	{
-		_preBindings.Add(FirstRunOnly.Do( contextAction ));
+		_mapBindings.Add(FirstRunOnly.Do( contextAction ));
 		return _parent;
 	}
 }
