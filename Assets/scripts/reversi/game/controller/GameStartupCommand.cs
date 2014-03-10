@@ -3,6 +3,7 @@ using System.Collections;
 using strange.extensions.context.impl;
 using strange.extensions.signal.impl;
 using strange.extensions.command.impl;
+using reversi.game.space;
 
 namespace reversi.game
 {
@@ -15,13 +16,19 @@ namespace reversi.game
 		public IGameObject gameObject { get; set; }
 
 		[Inject]
-		public SpaceModel spaceModel { get; set; }
+		public CreateGridSpacesSignal spaceSignals { get; set; }
 
 		override public void Execute()
 		{
-			spaceModel.Log();
+			buildGridSpaces( 4, 4 );
+
 			addSceneLighting();
 			demoPopulatedScene();
+		}
+
+		void buildGridSpaces ( int columns, int rows )
+		{
+			spaceSignals.Dispatch("Grid", new Vector2( 4, 4 ));
 		}
 
 		void addSceneLighting ()

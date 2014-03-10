@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace reversi.game
+namespace reversi.game.space
 {
 	[Implements(typeof(SpaceModel))]
 	public class SpaceModel
 	{
-		public SpaceModel ()
+		[PostConstruct]
+		public void Init()
 		{
-		}
-
-		public void Log()
-		{
-			Debug.Log( "Hello SpaceModel!" );
 		}
 	}
 }

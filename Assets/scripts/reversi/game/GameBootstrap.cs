@@ -4,6 +4,7 @@ using strange.extensions.context.impl;
 using strange.extensions.signal.impl;
 using strange.extensions.context.api;
 using reversi.main;
+using reversi.game.space;
 
 namespace reversi.game
 {
@@ -17,6 +18,7 @@ namespace reversi.game
 				.ForContextView(this)
 				.SetStartSignalAndCommand<GameContextStartSignal, GameStartupCommand>()
 				.MapBinder().Add( mapAllWithImplicitBinder )
+				.MapBinder().Add( mapCommands )
 				.Build();
 		}
 
@@ -28,5 +30,11 @@ namespace reversi.game
 			};
 			context.implicitBinder.ScanForAnnotatedClasses(namespacesToBind);
 		}
+
+		private void mapCommands ( MVCSContext context )
+		{
+			context.commandBinder.Bind<CreateGridSpacesSignal> ().To<CreateGridSpacesCommand> ();
+		}
+
 	}
 }
