@@ -29,7 +29,7 @@ namespace reversi.game
 			GameObject lightGameObject = new GameObject("Key Light");
 			lightGameObject.AddComponent<Light>();
 			lightGameObject.light.type = LightType.Directional;
-			lightGameObject.transform.Rotate ( new Vector3( -30f, -30f, 0) );
+			lightGameObject.transform.Rotate ( new Vector3( 30f, 30f, 0) );
 			lightGameObject.light.color = Color.white;
 			lightGameObject.light.intensity = 0.4f;
 		}
