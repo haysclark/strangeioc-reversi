@@ -35,6 +35,5 @@ namespace reversi.game
 		{
 			context.commandBinder.Bind<CreateGridSpacesSignal> ().To<CreateGridSpacesCommand> ();
 		}
-
 	}
 }
