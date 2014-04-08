@@ -50,12 +50,9 @@ namespace reversi.game
 						break;
 					}
 				}
-				if (2 + minimumPiecesToCapture <= pieces.Count)
+				if (HasEnoughPiecesForValidMove(pieces))
 				{
-					CaptureMove move = InjectionBinder.GetInstance<CaptureMove>();
-					move.Pieces = pieces;
-					move.TakingFaction = faction;
-					moves.Add(move);
+					AddMove (pieces, faction, moves);
 				}
 			}
 		}
@@ -79,14 +76,24 @@ namespace reversi.game
 						break;
 					}
 				}
-				if (2 + minimumPiecesToCapture <= pieces.Count)
+				if (HasEnoughPiecesForValidMove(pieces))
 				{
-					CaptureMove move = InjectionBinder.GetInstance<CaptureMove>();
-					move.Pieces = pieces;
-					move.TakingFaction = faction;
-					moves.Add(move);
+					AddMove(pieces, faction, moves);
 				}
 			}
+		}
+
+		private bool HasEnoughPiecesForValidMove(List<GridCellKey> pieces)
+		{
+			return 2 + minimumPiecesToCapture <= pieces.Count;
+		}
+
+		private void AddMove(List<GridCellKey> pieces, Faction faction, List<IMove> moves)
+		{
+			CaptureMove move = InjectionBinder.GetInstance<CaptureMove> ();
+			move.Pieces = pieces;
+			move.TakingFaction = faction;
+			moves.Add (move);
 		}
 	}
 }
