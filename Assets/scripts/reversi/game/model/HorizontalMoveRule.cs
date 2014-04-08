@@ -93,7 +93,7 @@ namespace reversi.game
 			CaptureMove move = InjectionBinder.GetInstance<CaptureMove> ();
 			move.Pieces = pieces;
 			move.TakingFaction = faction;
-			moves.Add (move);
+			moves.Add(move);
 		}
 	}
 }

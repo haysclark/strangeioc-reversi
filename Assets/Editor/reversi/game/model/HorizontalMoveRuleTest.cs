@@ -2,10 +2,8 @@ using System;
 using NUnit.Framework;
 using NSubstitute;
 using System.Collections.Generic;
-using strange.extensions.context.api;
 using strange.extensions.injector.api;
 using strange.extensions.injector.impl;
-using strange.extensions.command.impl;
 
 namespace reversi.game
 {

@@ -5,7 +5,6 @@ using NSubstitute;
 using System.Collections;
 using strange.extensions.context.api;
 using strange.extensions.command.impl;
-using UnityEngine;
 
 namespace reversi.main
 {
@@ -40,7 +39,7 @@ namespace reversi.main
 		{
 			_instance.Execute();
 
-			_mockApplication.Received().LoadLevelAdditive ("game");
+			_mockApplication.Received().LoadLevelAdditive("game");
 		}
 	}
 }
