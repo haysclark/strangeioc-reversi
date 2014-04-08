@@ -47,3 +47,4 @@ test-results.meta
 # ====================== #
 Assets/scripts/strange.meta
 Assets/scripts/UnityTestTools.meta
+UnitTestResults.xml
