@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using strange.extensions.context.api;
 using strange.extensions.context.impl;
 using strange.extensions.signal.impl;
+using strange.extensions.injector.api;
 
 namespace reversi.game
 {
@@ -19,9 +21,13 @@ namespace reversi.game
 				.Build();
 		}
 
-		private void mapBinders (strange.extensions.context.api.ICrossContextCapable context)
+		private void mapBinders (ICrossContextCapable context)
 		{
-
+			context.injectionBinder.Bind<IInjectionBinder>().ToValue(context.injectionBinder);
+			context.injectionBinder.Bind<IMoveRuleFactory>().To<MoveRuleFactory>().ToSingleton();
+			context.injectionBinder.Bind<HorizontalMoveRule>().ToValue(new HorizontalMoveRule(GameConfig.MinimumPiecesToCapture));
+			context.injectionBinder.Bind<CaptureMove>().To<CaptureMove>();
+			context.injectionBinder.Bind<Grid>().ToValue(new Grid(GameConfig.NumGridRows, GameConfig.NumGridCols));
 		}
 	}
 }

@@ -4,7 +4,6 @@ using NSubstitute;
 using System.Collections;
 using strange.extensions.context.api;
 using strange.extensions.command.impl;
-using UnityEngine;
 
 namespace reversi.game
 {
@@ -22,12 +21,36 @@ namespace reversi.game
 		}
 
 		[Test]
-		public void FillsMiddleFourCellsInitially()
+		public void PiecesAreNoneByDefault()
 		{
-			Assert.AreEqual(Faction.White, _instance.GetPiece((NumRows / 2) - 1, (NumCols / 2) - 1));
-			Assert.AreEqual(Faction.White, _instance.GetPiece(NumRows / 2, NumCols / 2));
-			Assert.AreEqual(Faction.Black, _instance.GetPiece(NumRows / 2, (NumCols / 2) - 1));
-			Assert.AreEqual(Faction.Black, _instance.GetPiece((NumRows / 2) - 1, NumCols / 2));
+			for (int row = 0; row < NumRows; row++)
+			{
+				for (int col = 0; col < NumCols; col++)
+				{
+					Assert.AreEqual(Faction.None, _instance.GetPiece(row, col));
+				}
+			}
+		}
+
+		[Test]
+		public void PlacePieceUpdatesGrid()
+		{
+			_instance.PlacePiece(0, 0, Faction.Black);
+			Assert.AreEqual(Faction.Black, _instance.GetPiece(0, 0));
+			_instance.PlacePiece(1, 1, Faction.White);
+			Assert.AreEqual(Faction.White, _instance.GetPiece(1, 1));
+		}
+
+		[Test]
+		public void NumRowsReturnsExepctedResult()
+		{
+			Assert.AreEqual(NumRows, _instance.NumRows);
+		}
+
+		[Test]
+		public void NumColsReturnsExpectedResult()
+		{
+			Assert.AreEqual(NumCols, _instance.NumCols);
 		}
 	}
 }

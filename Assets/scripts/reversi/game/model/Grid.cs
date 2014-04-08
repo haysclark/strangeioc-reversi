@@ -7,6 +7,20 @@ namespace reversi.game
 	{
 		private Faction[,] grid;
 
+		public int NumRows
+		{
+			get {
+				return grid.Length / NumCols;
+			}
+		}
+
+		public int NumCols
+		{
+			get {
+				return grid.GetLength(0);
+			}
+		}
+
 		public Grid(int numRows, int numCols)
 		{
 			grid = new Faction[numRows, numCols];
@@ -17,40 +31,16 @@ namespace reversi.game
 					grid[row, col] = Faction.None;
 				}
 			}
-			SetupInitialState();
 		}
 
 		public void PlacePiece(int row, int col, Faction faction)
 		{
-			if (CanPlace(row, col, faction)) {
-				grid[row, col] = faction;
-				UpdateStates(row, col);
-			}
+			grid[row, col] = faction;
 		}
 
 		public Faction GetPiece(int row, int col)
 		{
 			return grid[row, col];
-		}
-
-		private void SetupInitialState()
-		{
-			int numCols = grid.GetLength(0);
-			int numRows = grid.Length / numCols;
-			grid[(numRows / 2) - 1, (numCols / 2) - 1] = Faction.White;
-			grid[numRows / 2, numCols / 2] = Faction.White;
-			grid[numRows / 2, (numCols / 2) - 1] = Faction.Black;
-			grid[(numRows / 2) - 1, numCols / 2] = Faction.Black;
-		}
-
-		private bool CanPlace(int row, int col, Faction faction)
-		{
-			throw new NotImplementedException ();
-		}
-
-		private void UpdateStates(int row, int col)
-		{
-			throw new NotImplementedException ();
 		}
 	}
 }
