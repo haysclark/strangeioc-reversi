@@ -14,7 +14,9 @@ namespace reversi.game
 		[PostConstruct]
 		public void PostInject()
 		{
-
+			rules.Add(BuildHorizontalMoveRule());
+			rules.Add(BuildVerticalMoveRule());
+			rules.Add(BuildDiagonalMoveRule());
 		}
 
 		public List<IMoveRule> BuildMoveRules()
