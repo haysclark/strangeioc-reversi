@@ -7,13 +7,13 @@ using strange.extensions.injector.impl;
 
 namespace reversi.game
 {
-	public class VerticallMoveRuleTest
+	public class VerticalMoveRuleTest
 	{
 		const int NumRows = 8;
 		const int NumCols = 8;
 		const int MinimumPiecesToTake = 2;
 		
-		VerticalMoveRule _instance;
+		IMoveRule _instance;
 		Grid grid;
 		IInjectionBinder injector;
 		
@@ -22,10 +22,13 @@ namespace reversi.game
 		{
 			injector = new InjectionBinder();
 			injector.Bind<CaptureMove>().To<CaptureMove>();
+			injector.Bind<IInjectionBinder>().ToValue(injector);
+
+			MoveRuleFactory ruleFactory = new MoveRuleFactory();
+			ruleFactory.InjectionBinder = injector;
 			
 			grid = new Grid(NumRows, NumCols);
-			_instance = new VerticalMoveRule(MinimumPiecesToTake);
-			_instance.InjectionBinder = injector;
+			_instance = ruleFactory.BuildVerticalMoveRule();
 		}
 
 		[Test]

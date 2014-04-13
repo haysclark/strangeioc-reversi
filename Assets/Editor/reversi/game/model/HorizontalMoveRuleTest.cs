@@ -13,7 +13,7 @@ namespace reversi.game
 		const int NumCols = 8;
 		const int MinimumPiecesToTake = 2;
 
-		HorizontalMoveRule _instance;
+		IMoveRule _instance;
 		Grid grid;
 		IInjectionBinder injector;
 
@@ -22,10 +22,14 @@ namespace reversi.game
 		{
 			injector = new InjectionBinder();
 			injector.Bind<CaptureMove>().To<CaptureMove>();
+			injector.Bind<IInjectionBinder>().ToValue(injector);
+
+			MoveRuleFactory ruleFactory = new MoveRuleFactory();
+			ruleFactory.InjectionBinder = injector;
 
 			grid = new Grid(NumRows, NumCols);
-			_instance = new HorizontalMoveRule(MinimumPiecesToTake);
-			_instance.InjectionBinder = injector;
+
+			_instance = ruleFactory.BuildHorizontalMoveRule();
 		}
 
 		[Test]
