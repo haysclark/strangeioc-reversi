@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3300000}
   - 136: {fileID: 13600000}
   - 23: {fileID: 2300000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Disk
   m_TagString: Untagged
@@ -57,6 +58,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3578ffbeb7e1f6499992f72045a268a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neutralColor: {r: .588235319, g: .588235319, b: .588235319, a: 0}
+  blackColor: {r: 0, g: 0, b: 0, a: 0}
+  whiteColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!136 &13600000
 CapsuleCollider:
   m_ObjectHideFlags: 1

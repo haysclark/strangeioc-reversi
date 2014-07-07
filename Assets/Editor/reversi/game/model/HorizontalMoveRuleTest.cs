@@ -23,6 +23,7 @@ namespace reversi.game
 			injector = new InjectionBinder();
 			injector.Bind<CaptureMove>().To<CaptureMove>();
 			injector.Bind<IInjectionBinder>().ToValue(injector);
+			injector.Bind<PiecePlacedSignal>().To<PiecePlacedSignal>();
 
 			MoveRuleFactory ruleFactory = new MoveRuleFactory();
 			ruleFactory.InjectionBinder = injector;

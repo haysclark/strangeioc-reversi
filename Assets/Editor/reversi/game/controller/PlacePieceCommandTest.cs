@@ -7,6 +7,7 @@ using strange.extensions.command.impl;
 
 namespace reversi.game
 {
+	[TestFixture]
 	public class PlacePieceCommandTest
 	{
 		const int NumRows = 8;
@@ -32,8 +33,8 @@ namespace reversi.game
 			_instance = new PlacePieceCommand();
 			_instance.MoveRuleFactory = finderFactory;
 			_instance.Grid = grid;
-			_instance.position = new GridCellKey();
-			_instance.faction = Faction.White;
+			_instance.Position = new GridCellKey();
+			_instance.Faction = Faction.White;
 		}
 
 		[Test]
@@ -43,7 +44,7 @@ namespace reversi.game
 
 			List<IMove> foundMoves = new List<IMove>();
 			foundMoves.Add(Substitute.For<IMove>());
-			finderRule.FindMoves(_instance.position, _instance.faction, grid).Returns(foundMoves);
+			finderRule.FindMoves(_instance.Position, _instance.Faction, grid).Returns(foundMoves);
 
 			_instance.Execute();
 
@@ -57,7 +58,7 @@ namespace reversi.game
 			Assert.AreEqual(Faction.None, grid.GetPiece(0, 0));
 			
 			List<IMove> foundMoves = new List<IMove>();
-			finderRule.FindMoves(_instance.position, _instance.faction, grid).Returns(foundMoves);
+			finderRule.FindMoves(_instance.Position, _instance.Faction, grid).Returns(foundMoves);
 			
 			_instance.Execute();
 			

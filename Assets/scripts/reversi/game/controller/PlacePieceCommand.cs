@@ -7,9 +7,9 @@ namespace reversi.game
 	public class PlacePieceCommand : Command
 	{
 		[Inject]
-		public GridCellKey position { get; set; }
+		public GridCellKey Position { get; set; }
 		[Inject]
-		public Faction faction { get; set; }
+		public Faction Faction { get; set; }
 
 		[Inject]
 		public IMoveRuleFactory MoveRuleFactory { get; set; }
@@ -19,8 +19,8 @@ namespace reversi.game
 
 		override public void Execute()
 		{
-			Faction prevFaction = Grid.GetPiece(position.row, position.col);
-			Grid.PlacePiece(position.row, position.col, faction);
+			Faction prevFaction = Grid.GetPiece(Position.row, Position.col);
+			Grid.PlacePiece(Position.row, Position.col, Faction);
 			List<IMove> moves = FindMoves();
 			ResolveMoves(moves, prevFaction);
 		}
@@ -31,7 +31,7 @@ namespace reversi.game
 			List<IMoveRule> rules = MoveRuleFactory.BuildMoveRules();
 
 			foreach (var rule in rules) {
-				moves.AddRange(rule.FindMoves(position, faction, Grid));
+				moves.AddRange(rule.FindMoves(Position, Faction, Grid));
 			}
 			return moves;
 		}
@@ -45,12 +45,12 @@ namespace reversi.game
 			}
 		}
 
-		void UndoPlacement(Faction prevFaction)
+		private void UndoPlacement(Faction prevFaction)
 		{
-			Grid.PlacePiece(position.row, position.col, prevFaction);
+			Grid.PlacePiece(Position.row, Position.col, prevFaction);
 		}
 
-		void ApplyMoves(List<IMove> moves)
+		private void ApplyMoves(List<IMove> moves)
 		{
 			foreach (var move in moves) {
 				move.ApplyMove(Grid);

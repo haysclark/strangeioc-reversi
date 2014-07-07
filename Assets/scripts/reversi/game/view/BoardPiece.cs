@@ -1,19 +1,30 @@
 using UnityEngine;
 using System.Collections;
+using reversi.game;
 
-public class BoardPiece : MonoBehaviour
+namespace reversi.game
 {
+	[RequireComponent(typeof(MeshRenderer))]
+	public class BoardPiece : MonoBehaviour
+	{
+		public Color neutralColor;
+		public Color blackColor;
+		public Color whiteColor;
 
-		// Use this for initialization
-		void Start ()
+		void Start()
 		{
-	
+			renderer.material.color = neutralColor;
 		}
-	
-		// Update is called once per frame
-		void Update ()
+
+		public void SetFaction(Faction faction)
 		{
-	
+			if (Faction.Black == faction) {
+				renderer.material.color = blackColor;
+			} else if (Faction.White == faction) {
+				renderer.material.color = whiteColor;
+			} else {
+				renderer.material.color = neutralColor;
+			}
 		}
+	}
 }
-

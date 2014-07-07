@@ -16,12 +16,16 @@ namespace reversi.game
 		DirectionalMoveRule _instance;
 		Grid grid;
 		IInjectionBinder injector;
+		PiecePlacedSignal piecePlacedSignal;
 		
 		[SetUp]
 		public void SetUp()
 		{
 			injector = new InjectionBinder();
 			injector.Bind<CaptureMove>().To<CaptureMove>();
+
+			piecePlacedSignal = Substitute.For<PiecePlacedSignal>();
+			injector.Bind<PiecePlacedSignal>().To(piecePlacedSignal);
 			
 			grid = new Grid(NumRows, NumCols);
 		}
@@ -51,11 +55,11 @@ namespace reversi.game
 				move.ApplyMove(grid);
 			}
 			
-			Assert.AreEqual(Faction.White, grid.GetPiece(1, 1));
-			Assert.AreEqual(Faction.White, grid.GetPiece(2, 1));
-			Assert.AreEqual(Faction.White, grid.GetPiece(3, 1));
-			Assert.AreEqual(Faction.White, grid.GetPiece(4, 1));
-			Assert.AreEqual(Faction.White, grid.GetPiece(5, 1));
+			VerifyGridUpdatedAndSignalFired(Faction.White, 1, 1);
+			VerifyGridUpdatedAndSignalFired(Faction.White, 2, 1);
+			VerifyGridUpdatedAndSignalFired(Faction.White, 3, 1);
+			VerifyGridUpdatedAndSignalFired(Faction.White, 4, 1);
+			VerifyGridUpdatedAndSignalFired(Faction.White, 5, 1);
 		}
 
 		[Test]
@@ -76,10 +80,10 @@ namespace reversi.game
 				move.ApplyMove(grid);
 			}
 			
-			Assert.AreEqual(Faction.Black, grid.GetPiece(0, 0));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(0, 1));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(0, 2));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(0, 3));
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 0, 0);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 0, 1);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 0, 2);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 0, 3);
 		}
 
 		[Test]
@@ -98,10 +102,16 @@ namespace reversi.game
 				move.ApplyMove(grid);
 			}
 
-			Assert.AreEqual(Faction.Black, grid.GetPiece(4, 4));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(5, 5));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(6, 6));
-			Assert.AreEqual(Faction.Black, grid.GetPiece(7, 7));
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 4, 4);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 5, 5);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 6, 6);
+			VerifyGridUpdatedAndSignalFired(Faction.Black, 7, 7);
+		}
+
+		private void VerifyGridUpdatedAndSignalFired(Faction faction, int row, int col)
+		{
+			Assert.AreEqual(faction, grid.GetPiece(row, col));
+			piecePlacedSignal.Received().Dispatch(new GridCellKey(row, col), faction);
 		}
 	}
 }

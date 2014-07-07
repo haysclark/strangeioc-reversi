@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using strange.extensions.context.api;
 using strange.extensions.context.impl;
 using strange.extensions.signal.impl;
 using strange.extensions.injector.api;
 using strange.extensions.command.api;
+using strange.extensions.mediation.api;
+using strange.extensions.mediation.impl;
 
 namespace reversi.game
 {
@@ -17,6 +19,7 @@ namespace reversi.game
 				.MapBinder().Add(new reversi.main.ConfigureApplicationService().Setup)
 				.MapBinder().Add(mapInjections)
 				.MapBinder().Add(mapCommands)
+				.MapBinder().Add(mapMediators)
 				.Build();
 		}
 
@@ -32,7 +35,13 @@ namespace reversi.game
 		{
 			ICommandBinder commandBinder = context.injectionBinder.GetInstance<ICommandBinder>();
 			commandBinder.Bind<SetInitialStateSignal>().To<SetInitialStateCommand>();
+			commandBinder.Bind<PlacePieceSignal>().To<PlacePieceCommand>();
 		}
 
+		private void mapMediators(ICrossContextCapable context)
+		{
+			IMediationBinder mediationBinder = context.injectionBinder.GetInstance<IMediationBinder>();
+			mediationBinder.Bind<BoardView>().To<BoardViewMediator>();
+		}
 	}
 }
