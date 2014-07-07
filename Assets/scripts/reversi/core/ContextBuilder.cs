@@ -44,7 +44,7 @@ public class ContextBuilder
 	}
 
 	public ContextBuilder SetStartSignalAndCommand<T,U>()
-		where T : Signal, new()
+		where T : TestableSignal, new()
 		where U : ICommand, new()
 	{
 		UseSignals();
@@ -104,14 +104,14 @@ public class MapBinderBuilder
 public class StartSignalMapper
 {
 	public Action<ICrossContextCapable> SetSignalAndCommand<T,U>()
-		where T : Signal, new()
+		where T : TestableSignal, new()
 		where U : ICommand, new()
 	{
 		Action<ICrossContextCapable> response = delegate(ICrossContextCapable context)
 		{
 			var commandBinder = (SignalCommandBinder)context.injectionBinder.GetInstance<ICommandBinder>();
 			commandBinder.Bind<T> ().To<U> ();
-			Signal startSignal = (Signal)context.injectionBinder.GetInstance<T>();
+			TestableSignal startSignal = (TestableSignal)context.injectionBinder.GetInstance<T>();
 			startSignal.Dispatch();
 		};
 		return response;

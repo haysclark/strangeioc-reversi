@@ -15,7 +15,7 @@ using strange.extensions.signal.impl;
 
 namespace reversi.main
 {
-	public class MainContextStartSignal : Signal{}
+	public class MainContextStartSignal : TestableSignal{}
 
 	public class MainBootstrap : ContextView
 	{

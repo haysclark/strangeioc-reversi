@@ -1,7 +1,7 @@
 using strange.extensions.signal.impl;
 using reversi.game;
 
-public class GameContextStartSignal : Signal {}
-public class SetInitialStateSignal : Signal {}
-public class PlacePieceSignal : Signal<GridCellKey, Faction> {}
-public class PiecePlacedSignal : Signal<GridCellKey, Faction> {}
+public class GameContextStartSignal : TestableSignal {}
+public class SetInitialStateSignal : TestableSignal {}
+public class PlacePieceSignal : TestableSignal<GridCellKey, Faction> {}
+public class PiecePlacedSignal : TestableSignal<GridCellKey, Faction> {}
