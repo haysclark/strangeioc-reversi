@@ -36,6 +36,8 @@ namespace reversi.game
 			ICommandBinder commandBinder = context.injectionBinder.GetInstance<ICommandBinder>();
 			commandBinder.Bind<SetInitialStateSignal>().To<SetInitialStateCommand>();
 			commandBinder.Bind<PlacePieceSignal>().To<PlacePieceCommand>();
+			commandBinder.Bind<PiecePlacedSignal>();
+			commandBinder.Bind<InitializeBoardSignal>();
 		}
 
 		private void mapMediators(ICrossContextCapable context)
