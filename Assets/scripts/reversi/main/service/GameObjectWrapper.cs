@@ -39,5 +39,10 @@ namespace reversi.main
 		{
 			return GameObject.Instantiate(obj, position, rotation);
 		}
+
+		public void Destroy(UnityEngine.Object obj)
+		{
+			GameObject.Destroy(obj);
+		}
 	}
 }

@@ -9,4 +9,5 @@ public interface IGameObject
 	GameObject FindWithTag(string tag);
 	UnityEngine.Object Instantiate(UnityEngine.Object obj);
 	UnityEngine.Object Instantiate(UnityEngine.Object obj, Vector3 position, Quaternion rotation);
+	void Destroy(UnityEngine.Object obj);
 }
